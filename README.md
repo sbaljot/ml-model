@@ -53,9 +53,3 @@ Optuna tunes hyperparameters using five-fold ROC AUC on the undersampled data. T
 Each full-feature model reports XGBoost gain importance. One-hot category importances are summed back to their original feature. For each model independently, features with importance **at or below 0.02** are removed, and a reduced-feature model is fitted. The comparison therefore includes three full-feature models and three reduced-feature models.
 
 The validation set is used to select a separate threshold for each model: maximize churn recall while keeping churn precision at least `0.55`. Change `MIN_CHURN_PRECISION` in `testing_pipeline.py` to use a different precision floor. The test set is reserved for final evaluation and reports accuracy, ROC AUC, the classification report, and the confusion matrix. Sample predictions show all six approaches for the same test customers.
-
-## Notes
-
-- Lowering the decision threshold generally catches more churners (higher recall) but flags more customers who do not churn (lower precision).
-- The feature-importance cutoff is a heuristic. Compare reduced-feature and full-feature validation/test results before deciding which model to use.
-- XGBoost's CUDA GPU training is not available in the standard macOS package; this project runs on CPU on macOS.
