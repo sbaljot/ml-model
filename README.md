@@ -4,8 +4,7 @@ This project trains XGBoost models to predict whether a Telco customer will chur
 
 ## Project files
 
-- `churn_analysis.ipynb` — self-contained notebook with the complete workflow and side-by-side evaluation.
-- `WA_Fn-UseC_-Telco-Customer-Churn.csv` — input dataset; keep it beside the notebook and Python scripts.
+- `WA_Fn-UseC_-Telco-Customer-Churn.csv` — input dataset; keep it beside the Python scripts.
 - `train_test_split.py` — loads the CSV and creates fitting, validation, and test partitions, then prepares undersampled and SMOTE training data.
 - `class_imbalance.py` — undersampling and SMOTE-NC helper functions.
 - `training_pipeline.py` — Optuna search, model fitting, and feature-importance analysis.
@@ -20,7 +19,7 @@ Create and activate a virtual environment from the project directory:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install pandas scikit-learn xgboost optuna imbalanced-learn jupyter
+python -m pip install pandas scikit-learn xgboost optuna imbalanced-learn
 ```
 
 On macOS, if importing XGBoost reports a missing `libomp.dylib`, install the OpenMP runtime with Homebrew:
@@ -28,16 +27,6 @@ On macOS, if importing XGBoost reports a missing `libomp.dylib`, install the Ope
 ```bash
 brew install libomp
 ```
-
-## Run the notebook
-
-Start Jupyter from the project directory so the notebook can find the CSV:
-
-```bash
-jupyter notebook
-```
-
-Open `churn_analysis.ipynb` and run the cells from top to bottom. It performs 30 Optuna trials with five-fold cross-validation, then fits six final models. This can take a few minutes depending on your computer.
 
 ## Run the Python scripts
 
@@ -63,7 +52,7 @@ Optuna tunes hyperparameters using five-fold ROC AUC on the undersampled data. T
 
 Each full-feature model reports XGBoost gain importance. One-hot category importances are summed back to their original feature. For each model independently, features with importance **at or below 0.02** are removed, and a reduced-feature model is fitted. The comparison therefore includes three full-feature models and three reduced-feature models.
 
-The validation set is used to select a separate threshold for each model: maximize churn recall while keeping churn precision at least `0.55`. Change `MIN_CHURN_PRECISION` in the notebook or `testing_pipeline.py` to use a different precision floor. The test set is reserved for final evaluation and reports accuracy, ROC AUC, the classification report, and the confusion matrix. Sample predictions show all six approaches for the same test customers.
+The validation set is used to select a separate threshold for each model: maximize churn recall while keeping churn precision at least `0.55`. Change `MIN_CHURN_PRECISION` in `testing_pipeline.py` to use a different precision floor. The test set is reserved for final evaluation and reports accuracy, ROC AUC, the classification report, and the confusion matrix. Sample predictions show all six approaches for the same test customers.
 
 ## Notes
 
